@@ -122,7 +122,8 @@ async function handleEvent(event) {
 
   // Push Reward List
   mirrorReward.forEach(reward => {
-    replyContent.body.contents[4].push({
+
+    replyContent.body.contents[4].contents.push({
       type: "box",
       layout: "horizontal",
       contents: [
