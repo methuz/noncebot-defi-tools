@@ -9,7 +9,6 @@ const terra = new LCDClient({
 });
 
 export async function getReward(address) {
-  const result = await mirror.factory.getConfig();
   console.log('getting reward')
   const { reward_infos: rewardInfos } = await mirror.staking.getRewardInfo(address)
 

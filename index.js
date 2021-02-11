@@ -104,10 +104,12 @@ async function handleEvent(event) {
 
   // Test valid address
   const address = event.message.text;
+  console.log("address = ", JSON.stringify(address, null, 4));
 
   const terraAddressFormat = /^terra[a-z0-9]{39}$/;
 
   if (!terraAddressFormat.test(address)) {
+    console.log('invalid address')
     return Promise.resolve(null);
   }
 
