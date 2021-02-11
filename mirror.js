@@ -8,7 +8,7 @@ const terra = new LCDClient({
   chainID: 'localterra',
 });
 
-async function getReward(address) {
+export async function getReward(address) {
   const result = await mirror.factory.getConfig();
   const { reward_infos: rewardInfos } = await mirror.staking.getRewardInfo(address)
 
@@ -42,7 +42,3 @@ function rewardCalc (globalIndex, info) {
      }
      return "0"
    }
-
-module.exports = {
-  getReward
-}

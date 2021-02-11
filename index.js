@@ -1,8 +1,7 @@
 "use strict";
-
-const line = require("@line/bot-sdk");
-const express = require("express");
-const mirror = require("./mirror");
+import line from "@line/bot-sdk"
+import express from "express"
+import { getReward }from "./mirror.js"
 
 // create LINE SDK config from env variables
 const config = {
@@ -112,7 +111,7 @@ function handleEvent(event) {
     return Promise.resolve(null);
   }
 
-  const mirrorReward = mirror.getReward(address);
+  const mirrorReward = getReward(address);
 
   let replyContent = messageTemplate;
 
