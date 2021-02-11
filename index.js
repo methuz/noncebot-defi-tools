@@ -1,7 +1,7 @@
 "use strict";
-import line from "@line/bot-sdk"
-import express from "express"
-import { getReward }from "./mirror.js"
+import line from "@line/bot-sdk";
+import express from "express";
+import { getReward } from "./mirror.js";
 
 // create LINE SDK config from env variables
 const config = {
@@ -109,20 +109,19 @@ async function handleEvent(event) {
   const terraAddressFormat = /^terra[a-z0-9]{39}$/;
 
   if (!terraAddressFormat.test(address)) {
-    console.log('invalid address')
+    console.log("invalid address");
     return Promise.resolve(null);
   }
 
   const mirrorReward = await getReward(address);
 
-  let replyContent = messageTemplate;
+  let replyContent = JSON.parse(JSON.stringify(messageTemplate));
 
   // Set current time
   replyContent.body.contents[5].contents[1].text = new Date().toLocaleString();
 
   // Push Reward List
   mirrorReward.forEach(reward => {
-
     replyContent.body.contents[4].contents.push({
       type: "box",
       layout: "horizontal",
@@ -145,7 +144,7 @@ async function handleEvent(event) {
     });
   });
 
-  let replyMessage = {
+  const replyMessage = {
     type: "flex",
     altText: "Your current mirror reward",
     contents: replyContent
