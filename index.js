@@ -123,7 +123,7 @@ async function handleEvent(event) {
   // Push Reward List
   let sum = 0;
   mirrorReward.forEach(reward => {
-    sum += reward.reward;
+    sum += parseFloat(reward.reward);
     replyContent.body.contents[4].contents.push({
       type: "box",
       layout: "horizontal",
