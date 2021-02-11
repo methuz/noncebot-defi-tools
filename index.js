@@ -118,7 +118,7 @@ async function handleEvent(event) {
   let replyContent = messageTemplate;
 
   // Set current time
-  replyContent.body.contents[4].contents[1].text = new Date().toLocaleString();
+  replyContent.body.contents[5].contents[1].text = new Date().toLocaleString();
 
   // Push Reward List
   mirrorReward.forEach(reward => {
