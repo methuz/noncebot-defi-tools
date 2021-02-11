@@ -161,7 +161,7 @@ async function handleEvent(event) {
       {
         type: "text",
         weight: "bold",
-        text: ""+sum,
+        text: ""+sum.toFixed(6),
         size: "sm",
         color: "#111111",
         align: "end"
