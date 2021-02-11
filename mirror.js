@@ -10,12 +10,14 @@ const terra = new LCDClient({
 
 export async function getReward(address) {
   const result = await mirror.factory.getConfig();
+  console.log('getting reward')
   const { reward_infos: rewardInfos } = await mirror.staking.getRewardInfo(address)
 
   const mapRewardIndex = rewardInfos.map((rewardObj) => {
     return mirror.staking.getPoolInfo(rewardObj.asset_token)
   })
 
+  console.log('getting global index')
   const mapRewardIndexResult = await Promise.all(mapRewardIndex)
 
   const calculateReward = rewardInfos.map((rewardObj, i) => {
@@ -25,6 +27,8 @@ export async function getReward(address) {
       reward: new BigNumber(_reward).integerValue(BigNumber.ROUND_FLOOR).dividedBy(1000000).toString()
     }
   })
+
+  console.log(calculateReward)
 
   return calculateReward
 }
