@@ -121,7 +121,9 @@ async function handleEvent(event) {
   replyContent.body.contents[5].contents[1].text = new Date().toLocaleString();
 
   // Push Reward List
+  let sum = 0;
   mirrorReward.forEach(reward => {
+    sum += reward.reward;
     replyContent.body.contents[4].contents.push({
       type: "box",
       layout: "horizontal",
@@ -142,6 +144,29 @@ async function handleEvent(event) {
         }
       ]
     });
+  });
+
+  replyContent.body.contents[4].contents.push({
+    type: "box",
+    layout: "horizontal",
+    contents: [
+      {
+        type: "text",
+        text: "SUM",
+        size: "sm",
+        weight: "bold",
+        color: "#555555",
+        flex: 0
+      },
+      {
+        type: "text",
+        weight: "bold",
+        text: ""+sum,
+        size: "sm",
+        color: "#111111",
+        align: "end"
+      }
+    ]
   });
 
   const replyMessage = {
