@@ -115,8 +115,7 @@ async function handleEvent(event) {
 
   const mirrorReward = await getReward(address);
   const priceData = await getMirPrice();
-  console.log(priceData, typeof priceData)
-  const mirPrice = priceData.prices.price;
+  const mirPrice = priceData.asset.prices.price;
 
   let replyContent = JSON.parse(JSON.stringify(messageTemplate));
 
