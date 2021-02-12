@@ -154,7 +154,7 @@ async function handleEvent(event) {
     contents: [
       {
         type: "text",
-        text: "SUM in MIR",
+        text: "Total(MIR)",
         size: "sm",
         weight: "bold",
         color: "#555555",
@@ -172,12 +172,17 @@ async function handleEvent(event) {
   });
 
   replyContent.body.contents[4].contents.push({
+    type: "separator",
+    margin: "xxl"
+  });
+
+  replyContent.body.contents[4].contents.push({
     type: "box",
     layout: "horizontal",
     contents: [
       {
         type: "text",
-        text: "SUM in UST",
+        text: "Total(UST)",
         size: "sm",
         weight: "bold",
         color: "#555555",
@@ -186,7 +191,7 @@ async function handleEvent(event) {
       {
         type: "text",
         weight: "bold",
-        text: "" + sum.toFixed(6) * parseFloat(mirPrice),
+        text: "" + (sum * parseFloat(mirPrice)).toFixed(6),
         size: "sm",
         color: "#111111",
         align: "end"
