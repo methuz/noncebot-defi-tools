@@ -1,7 +1,6 @@
 # Noncebot Defi Tools
 
-## Just add line ID and start using
-Line ID: `@458urjpd`
+## Just add line ID '@458urjpd' and start using
 ![QR Code](https://github.com/methuz/noncebot-defi-tools/raw/main/img/qr.png)
 
 ## Check Reward
