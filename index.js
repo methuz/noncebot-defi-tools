@@ -66,6 +66,10 @@ const messageTemplate = {
         contents: []
       },
       {
+        type: "separator",
+        margin: "xxl"
+      },
+      {
         type: "box",
         layout: "horizontal",
         margin: "md",
@@ -120,7 +124,7 @@ async function handleEvent(event) {
   let replyContent = JSON.parse(JSON.stringify(messageTemplate));
 
   // Set current mir price
-  replyContent.body.contents[5].contents[1].text = mirPrice;
+  replyContent.body.contents[6].contents[1].text = mirPrice;
 
   // Push Reward List
   let sum = 0;
