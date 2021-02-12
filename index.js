@@ -130,7 +130,7 @@ async function handleEvent(event) {
       contents: [
         {
           type: "text",
-          text: "TODO:token_name",
+          text: reward.name,
           size: "sm",
           color: "#555555",
           flex: 0
