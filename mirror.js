@@ -53,6 +53,19 @@ export async function getReward(address) {
   return calculateReward;
 }
 
+export async function getPrices() {
+  //Oracle
+  mirror.oracle.getPrices().then(res=>{
+    let prices = res.Ok.prices
+    prices.map( price => {
+      return {
+        ...price,
+        name: mAssetsReverseIndex[price.asset_token]
+      }
+    })
+  )})
+}
+
 function rewardCalc(globalIndex, info) {
   if (globalIndex && info) {
     const { index, bond_amount, pending_reward } = info;
