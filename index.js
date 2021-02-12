@@ -176,11 +176,6 @@ async function handleEvent(event) {
   });
 
   replyContent.body.contents[4].contents.push({
-    type: "separator",
-    margin: "xxl"
-  });
-
-  replyContent.body.contents[4].contents.push({
     type: "box",
     layout: "horizontal",
     contents: [
