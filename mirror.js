@@ -78,7 +78,8 @@ export async function getMirPrice() {
        }
      }
    `;
-   return await request("https://graph.mirror.finance/graphql", query)
+   const price = await request("https://graph.mirror.finance/graphql", query)
+   return price
  }
 
 function rewardCalc(globalIndex, info) {
