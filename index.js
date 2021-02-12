@@ -1,7 +1,7 @@
 "use strict";
 import line from "@line/bot-sdk";
 import express from "express";
-import { getReward } from "./mirror.js";
+import { getReward, getMirPrice } from "./mirror.js";
 
 // create LINE SDK config from env variables
 const config = {
@@ -72,7 +72,7 @@ const messageTemplate = {
         contents: [
           {
             type: "text",
-            text: "time",
+            text: "MIR price",
             size: "xs",
             color: "#aaaaaa",
             flex: 0
@@ -114,11 +114,13 @@ async function handleEvent(event) {
   }
 
   const mirrorReward = await getReward(address);
+  const priceData = await getMirPrice();
+  const mirPrice = priceData.prices.price;
 
   let replyContent = JSON.parse(JSON.stringify(messageTemplate));
 
-  // Set current time
-  replyContent.body.contents[5].contents[1].text = new Date().toLocaleString();
+  // Set current mir price
+  replyContent.body.contents[5].contents[1].text = mirPrice;
 
   // Push Reward List
   let sum = 0;
@@ -152,7 +154,7 @@ async function handleEvent(event) {
     contents: [
       {
         type: "text",
-        text: "SUM",
+        text: "SUM in MIR",
         size: "sm",
         weight: "bold",
         color: "#555555",
@@ -161,7 +163,30 @@ async function handleEvent(event) {
       {
         type: "text",
         weight: "bold",
-        text: ""+sum.toFixed(6),
+        text: "" + sum.toFixed(6),
+        size: "sm",
+        color: "#111111",
+        align: "end"
+      }
+    ]
+  });
+
+  replyContent.body.contents[4].contents.push({
+    type: "box",
+    layout: "horizontal",
+    contents: [
+      {
+        type: "text",
+        text: "SUM in UST",
+        size: "sm",
+        weight: "bold",
+        color: "#555555",
+        flex: 0
+      },
+      {
+        type: "text",
+        weight: "bold",
+        text: "" + sum.toFixed(6) * parseFloat(mirPrice),
         size: "sm",
         color: "#111111",
         align: "end"

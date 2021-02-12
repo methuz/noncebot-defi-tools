@@ -1,6 +1,7 @@
 import { LCDClient } from "@terra-money/terra.js";
 import { Mirror } from "@mirror-protocol/mirror.js";
 import BigNumber from "bignumber.js";
+import { request, gql } from "graphql-request";
 
 const mirror = new Mirror();
 const terra = new LCDClient({
@@ -55,16 +56,31 @@ export async function getReward(address) {
 
 export async function getPrices() {
   //Oracle
-  mirror.oracle.getPrices().then(res=>{
-    let prices = res.Ok.prices
-    prices.map( price => {
+  mirror.oracle.getPrices().then(res => {
+    let prices = res.Ok.prices;
+    prices.map(price => {
       return {
         ...price,
         name: mAssetsReverseIndex[price.asset_token]
-      }
-    })
-  )})
+      };
+    });
+  });
 }
+
+export async function getMirPrice() {
+   const query = gql`
+     query {
+       asset(token: "terra15gwkyepfc6xgca5t5zefzwy42uts8l2m4g40k6") {
+         token
+         prices {
+           price
+         }
+       }
+     }
+   `;
+   const price = await request("https://graph.mirror.finance/graphql", query)
+   console.log(price)
+ }
 
 function rewardCalc(globalIndex, info) {
   if (globalIndex && info) {
