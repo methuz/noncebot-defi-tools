@@ -11,7 +11,7 @@ const terra = new LCDClient({
 const mAssetsReverseIndex = {
   terra15gwkyepfc6xgca5t5zefzwy42uts8l2m4g40k6: "MIR",
   terra1vxtwu4ehgzz77mnfwrntyrmgl64qjs75mpwqaz: "mAAPL",
-  terra1falkl6jy4087h4z567y2l59defm9acmwcs70ts: "mGOOGL",
+  terra1h8arz2k547uvmpxctuwush3jzc8fun4s96qgwt: "mGOOGL",
   terra14y5affaarufk3uscy2vr6pe6w6zqf2wpjzn5sh: "mTSLA",
   terra1jsxngqasf2zynj5kyh0tgq9mj3zksa5gk35j4k: "mNFLX",
   terra1csk6tc7pdmpr782w527hwhez6gfv632tyf72cp: "mQQQ",
