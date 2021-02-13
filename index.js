@@ -92,16 +92,16 @@ async function getMirrorPrices(event) {
   let template = generateTemplate("Market Prices", "Mirror", "to the moon");
   const prices = await getMarketPrices();
   template.body.contents[4].contents.push(generateRow3("Name", "Oracle", "AMM", "Diff%"));
-  prices.assets.forEach(price => {
-    let realPrice = price.prices.price;
-    realPrice = realPrice ? parseFloat(realPrice).toFixed(2) + "" : "-";
-    let oraclePrice = price.prices.oraclePrice;
-    oraclePrice = oraclePrice ? parseFloat(oraclePrice).toFixed(2) + "" : "-";
+  //prices.assets.forEach(price => {
+  //  let realPrice = price.prices.price;
+  //  realPrice = realPrice ? parseFloat(realPrice).toFixed(2) + "" : "-";
+  //  let oraclePrice = price.prices.oraclePrice;
+  //  oraclePrice = oraclePrice ? parseFloat(oraclePrice).toFixed(2) + "" : "-";
 
-    const diff = "" + (((realPrice - oraclePrice) * 100) / oraclePrice).toFixed(2);
+  //  const diff = "" + (((realPrice - oraclePrice) * 100) / oraclePrice).toFixed(2);
 
-    template.body.contents[4].contents.push(generateRow3(price.symbol, oraclePrice, realPrice, diff, { thirdColor: "#FF2400" }));
-  });
+  //  template.body.contents[4].contents.push(generateRow3(price.symbol, oraclePrice, realPrice, diff, { thirdColor: "#FF2400" }));
+  //});
 
   const replyMessage = {
     type: "flex",
