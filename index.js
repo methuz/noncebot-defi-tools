@@ -3,6 +3,8 @@ import line from "@line/bot-sdk";
 import express from "express";
 import { getReward, getMirPrice } from "./mirror.js";
 
+import { listTemplate } from "./line.js";
+
 // create LINE SDK config from env variables
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -27,78 +29,6 @@ app.post("/callback", line.middleware(config), (req, res) => {
     });
 });
 
-const messageTemplate = {
-  type: "bubble",
-  body: {
-    type: "box",
-    layout: "vertical",
-    contents: [
-      {
-        type: "text",
-        text: "Total Reward",
-        weight: "bold",
-        color: "#1DB446",
-        size: "sm"
-      },
-      {
-        type: "text",
-        text: "Mirror",
-        weight: "bold",
-        size: "xxl",
-        margin: "md"
-      },
-      {
-        type: "text",
-        text: "mirror.finance",
-        size: "xs",
-        color: "#aaaaaa",
-        wrap: true
-      },
-      {
-        type: "separator",
-        margin: "xxl"
-      },
-      {
-        type: "box",
-        layout: "vertical",
-        margin: "xxl",
-        spacing: "sm",
-        contents: []
-      },
-      {
-        type: "separator",
-        margin: "xxl"
-      },
-      {
-        type: "box",
-        layout: "horizontal",
-        margin: "md",
-        contents: [
-          {
-            type: "text",
-            text: "MIR price",
-            size: "xs",
-            color: "#aaaaaa",
-            flex: 0
-          },
-          {
-            type: "text",
-            text: "12/12/12",
-            color: "#aaaaaa",
-            size: "xs",
-            align: "end"
-          }
-        ]
-      }
-    ]
-  },
-  styles: {
-    footer: {
-      separator: true
-    }
-  }
-};
-
 // event handler
 async function handleEvent(event) {
   if (event.type !== "message" || event.message.type !== "text") {
@@ -121,7 +51,7 @@ async function handleEvent(event) {
   const priceData = await getMirPrice();
   const mirPrice = priceData.asset.prices.price;
 
-  let replyContent = JSON.parse(JSON.stringify(messageTemplate));
+  let replyContent = JSON.parse(JSON.stringify(listTemplate));
 
   // Set current mir price
   replyContent.body.contents[6].contents[1].text = mirPrice;
@@ -130,73 +60,20 @@ async function handleEvent(event) {
   let sum = 0;
   mirrorReward.forEach(reward => {
     sum += parseFloat(reward.reward);
-    replyContent.body.contents[4].contents.push({
-      type: "box",
-      layout: "horizontal",
-      contents: [
-        {
-          type: "text",
-          text: reward.name,
-          size: "sm",
-          color: "#555555",
-          flex: 0
-        },
-        {
-          type: "text",
-          text: reward.reward,
-          size: "sm",
-          color: "#111111",
-          align: "end"
-        }
-      ]
-    });
+    replyContent.body.contents[4].contents.push(
+      generateLine(reward.name, reward.reward)
+    );
   });
 
-  replyContent.body.contents[4].contents.push({
-    type: "box",
-    layout: "horizontal",
-    contents: [
-      {
-        type: "text",
-        text: "Total(MIR)",
-        size: "sm",
-        weight: "bold",
-        color: "#555555",
-        flex: 0
-      },
-      {
-        type: "text",
-        weight: "bold",
-        text: "" + sum.toFixed(6),
-        size: "sm",
-        color: "#111111",
-        align: "end"
-      }
-    ]
-  });
+  replyContent.body.contents[4].contents.push(
+    generateLine("Total(MIR)", "" + sum.toFixed(6), { bold: true })
+  );
 
-  replyContent.body.contents[4].contents.push({
-    type: "box",
-    layout: "horizontal",
-    contents: [
-      {
-        type: "text",
-        text: "Total(UST)",
-        size: "sm",
-        weight: "bold",
-        color: "#555555",
-        flex: 0
-      },
-      {
-        type: "text",
-        weight: "bold",
-        text: "" + (sum * parseFloat(mirPrice)).toFixed(6),
-        size: "sm",
-        color: "#111111",
-        align: "end"
-      }
-    ]
-  });
+  replyContent.body.contents[4].contents.push(
+    generateLine("Total(UST)", "" + (sum * parseFloat(mirPrice)).toFixed(6), {
+      bold: true
+    })
+  );
 
   const replyMessage = {
     type: "flex",
@@ -206,6 +83,36 @@ async function handleEvent(event) {
 
   // use reply API
   return client.replyMessage(event.replyToken, replyMessage);
+}
+
+function generateLine(title, value, options) {
+  let returnBody = {
+    type: "box",
+    layout: "horizontal",
+    contents: [
+      {
+        type: "text",
+        text: title,
+        size: "sm",
+        color: "#555555",
+        flex: 0
+      },
+      {
+        type: "text",
+        text: value,
+        size: "sm",
+        color: "#111111",
+        align: "end"
+      }
+    ]
+  };
+
+  if (options && options.bold) {
+    returnBody.contents[0].weight = "bold";
+    returnBody.contents[1].weight = "bold";
+  }
+
+  return returnBody;
 }
 
 // listen on port
