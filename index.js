@@ -57,7 +57,7 @@ async function getMirrorReward(text) {
   let replyContent = JSON.parse(JSON.stringify(listTemplate));
 
   // Set current mir price
-  replyContent.body.contents[2].text = 'MIR = $' + mirPrice;
+  replyContent.body.contents[2].text = "MIR = $" + mirPrice;
 
   // Push Reward List
   let sum = 0;

@@ -33,7 +33,9 @@ const mAssetsReverseIndex = {
 
 export async function getReward(address) {
   console.log("getting reward");
-  const { reward_infos: rewardInfos } = await mirror.staking.getRewardInfo(address);
+  const { reward_infos: rewardInfos } = await mirror.staking.getRewardInfo(
+    address
+  );
 
   const mapRewardIndex = rewardInfos.map(rewardObj => {
     return mirror.staking.getPoolInfo(rewardObj.asset_token);
@@ -47,7 +49,10 @@ export async function getReward(address) {
     return {
       name: mAssetsReverseIndex[rewardObj.asset_token] || "unknown",
       asset_token: rewardObj.asset_token,
-      reward: new BigNumber(_reward).integerValue(BigNumber.ROUND_FLOOR).dividedBy(1000000).toString()
+      reward: new BigNumber(_reward)
+        .integerValue(BigNumber.ROUND_FLOOR)
+        .dividedBy(1000000)
+        .toString()
     };
   });
 
@@ -68,41 +73,44 @@ export async function getPrices() {
 }
 
 export async function getMirPrice() {
-   const query = gql`
-     query {
-       asset(token: "terra15gwkyepfc6xgca5t5zefzwy42uts8l2m4g40k6") {
-         token
-         prices {
-           price
-         }
-       }
-     }
-   `;
-   const price = await request("https://graph.mirror.finance/graphql", query)
-   return price
- }
+  const query = gql`
+    query {
+      asset(token: "terra15gwkyepfc6xgca5t5zefzwy42uts8l2m4g40k6") {
+        token
+        prices {
+          price
+        }
+      }
+    }
+  `;
+  const price = await request("https://graph.mirror.finance/graphql", query);
+  return price;
+}
 
-export async function getPrices() {
-	const query = gql`
-		query {
-			assets {
-				name
-				prices {
-					price
-					oraclePrice
-				}
-			}
-		}
-	`;
-	const prices = await request("https://graph.mirror.finance/graphql", query);
-	return prices
+export async function getMarketPrices() {
+  const query = gql`
+    query {
+      assets {
+        name
+        prices {
+          price
+          oraclePrice
+        }
+      }
+    }
+  `;
+  const prices = await request("https://graph.mirror.finance/graphql", query);
+  return prices;
 }
 
 function rewardCalc(globalIndex, info) {
   if (globalIndex && info) {
     const { index, bond_amount, pending_reward } = info;
 
-    const reward = new BigNumber(globalIndex).minus(index).times(bond_amount).plus(pending_reward);
+    const reward = new BigNumber(globalIndex)
+      .minus(index)
+      .times(bond_amount)
+      .plus(pending_reward);
 
     return reward.toString();
   }
