@@ -96,7 +96,7 @@ async function getMirrorPrices(event) {
     const realPrice = price.prices.price;
     const oraclePrice = price.prices.oraclePrice;
     const diff = "" + (((realPrice - oraclePrice) * 100) / oraclePrice).toFixed(2);
-    template.body.contents[4].contents.push(generateRow3(price.name, oraclePrice || "-", realPrice || "-", diff, { thirdColor: "#FF2400" }));
+    template.body.contents[4].contents.push(generateRow3(price.symbol, parseFloat(oraclePrice).toFixed(2) + "" || "-", parseFloat(realPrice).toFixed(2) + "" || "-", diff, { thirdColor: "#FF2400" }));
   });
 
   const replyMessage = {

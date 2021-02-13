@@ -91,7 +91,7 @@ export async function getMarketPrices() {
   const query = gql`
     query {
       assets {
-        name
+        symbol
         prices {
           price
           oraclePrice
