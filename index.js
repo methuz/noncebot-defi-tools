@@ -83,7 +83,6 @@ async function getMirrorReward(text, event) {
     contents: replyContent
   };
 
-  console.log(replyMessage)
   // use reply API
   return client.replyMessage(event.replyToken, replyMessage);
 }
