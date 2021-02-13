@@ -1,9 +1,9 @@
 "use strict";
 import line from "@line/bot-sdk";
 import express from "express";
-import { getReward, getMirPrice, getPrices } from "./mirror.js";
+import { getReward, getMirPrice, getPrices, getMarketPrices } from "./mirror.js";
 
-import { listTemplate, generateRow } from "./line.js";
+import { listTemplate, generateRow, generateRow3, generateTemplate } from "./line.js";
 
 // create LINE SDK config from env variables
 const config = {
@@ -38,11 +38,15 @@ async function handleEvent(event) {
 
   // Test valid address
   const text = event.message.text;
+  console.log("text", text);
 
   const terraAddressFormat = /^terra[a-z0-9]{39}$/;
 
   if (terraAddressFormat.test(text)) {
     return await getMirrorReward(text, event);
+  }
+  if (text.toLowerCase() === "mirror" || text.toLowerCase() === "mir") {
+    return await getMirrorPrices(event);
   } else {
     const replyMessage = { type: "text", text: "Invalid Command" };
     return client.replyMessage(event.replyToken, replyMessage);
@@ -63,14 +67,10 @@ async function getMirrorReward(text, event) {
   let sum = 0;
   mirrorReward.forEach(reward => {
     sum += parseFloat(reward.reward);
-    replyContent.body.contents[4].contents.push(
-      generateRow(reward.name, reward.reward)
-    );
+    replyContent.body.contents[4].contents.push(generateRow(reward.name, reward.reward));
   });
 
-  replyContent.body.contents[4].contents.push(
-    generateRow("Total(MIR)", "" + sum.toFixed(6), { bold: true })
-  );
+  replyContent.body.contents[4].contents.push(generateRow("Total(MIR)", "" + sum.toFixed(6), { bold: true }));
 
   replyContent.body.contents[4].contents.push(
     generateRow("Total(UST)", "" + (sum * parseFloat(mirPrice)).toFixed(6), {
@@ -80,12 +80,33 @@ async function getMirrorReward(text, event) {
 
   const replyMessage = {
     type: "flex",
-    altText: "Your current mirror reward",
+    altText: "Your mirror reward",
     contents: replyContent
   };
 
   // use reply API
   return client.replyMessage(event.replyToken, replyMessage);
+}
+
+async function getMirrorPrices(event) {
+  let template = generateTemplate("Market Prices", "Mirror", "to the moon");
+  const prices = await getMarketPrices();
+  template.body.contents[4].contents.push(generateRow3("Name", "Oracle", "AMM", "Diff%"));
+  prices.assets.forEach(price => {
+    const realPrice = price.prices.price;
+    const oraclePrice = price.prices.oraclePrice;
+    const diff = "" + (((realPrice - oraclePrice) * 100) / oraclePrice).toFixed(2);
+    template.body.contents[4].contents.push(generateRow3(price.name, oraclePrice, realPrice, diff, { thirdColor: "#FF2400" }));
+  });
+
+  const replyMessage = {
+    type: "flex",
+    altText: "Your mirror reward",
+    contents: template
+  };
+
+  // use reply API
+  return client.replyMessage(event.replyToken, template);
 }
 
 // listen on port
