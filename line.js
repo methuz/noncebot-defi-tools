@@ -152,7 +152,7 @@ export function generateRow3(title, value1, value2, value3, options) {
   }
 
   if (options && options.thirdColor) {
-    returnBody.contents[i].color = options.thirdColor
+    returnBody.contents[3].color = options.thirdColor
   }
 
   return returnBody;
