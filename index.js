@@ -1,7 +1,7 @@
 "use strict";
 import line from "@line/bot-sdk";
 import express from "express";
-import { getReward, getMirPrice } from "./mirror.js";
+import { getReward, getMirPrice, getPrices } from "./mirror.js";
 
 import { listTemplate, generateRow } from "./line.js";
 
@@ -37,24 +37,27 @@ async function handleEvent(event) {
   }
 
   // Test valid address
-  const address = event.message.text;
-  console.log("address = ", JSON.stringify(address, null, 4));
+  const text = event.message.text;
 
   const terraAddressFormat = /^terra[a-z0-9]{39}$/;
 
-  if (!terraAddressFormat.test(address)) {
-    console.log("invalid address");
-    return Promise.resolve(null);
+  if (terraAddressFormat.test(text)) {
+    return await getMirrorReward(text);
+  } else {
+    const replyMessage = { type: "text", text: "Invalid Command" };
+    return client.replyMessage(event.replyToken, replyMessage);
   }
+}
 
-  const mirrorReward = await getReward(address);
+async function getMirrorReward(text) {
+  const mirrorReward = await getReward(text);
   const priceData = await getMirPrice();
   const mirPrice = priceData.asset.prices.price;
 
   let replyContent = JSON.parse(JSON.stringify(listTemplate));
 
   // Set current mir price
-  replyContent.body.contents[6].contents[1].text = mirPrice;
+  replyContent.body.contents[2].text = 'MIR = $' + mirPrice;
 
   // Push Reward List
   let sum = 0;

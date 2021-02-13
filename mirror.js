@@ -82,6 +82,22 @@ export async function getMirPrice() {
    return price
  }
 
+export async function getPrices() {
+	const query = gql`
+		query {
+			assets {
+				name
+				prices {
+					price
+					oraclePrice
+				}
+			}
+		}
+	`;
+	const prices = await request("https://graph.mirror.finance/graphql", query);
+	return prices
+}
+
 function rewardCalc(globalIndex, info) {
   if (globalIndex && info) {
     const { index, bond_amount, pending_reward } = info;

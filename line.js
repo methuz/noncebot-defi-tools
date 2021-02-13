@@ -47,14 +47,14 @@ export const listTemplate = {
         contents: [
           {
             type: "text",
-            text: "MIR price",
+            text: "Software By",
             size: "xs",
             color: "#aaaaaa",
             flex: 0
           },
           {
             type: "text",
-            text: "12/12/12",
+            text: "@Methuz",
             color: "#aaaaaa",
             size: "xs",
             align: "end"
