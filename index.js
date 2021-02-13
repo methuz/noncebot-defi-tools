@@ -93,7 +93,7 @@ async function getMirrorReward(text, event) {
 
   replyContent.body.contents[
     replyContent.body.contents.length - 1
-  ].contents[0].text = new Date.toUTCString();
+  ].contents[0].text = new Date().toUTCString();
 
   const replyMessage = {
     type: "flex",
@@ -130,7 +130,7 @@ async function getMirrorPrices(event) {
 
   template.body.contents[
     template.body.contents.length - 1
-  ].contents[0].text = new Date.toUTCString();
+  ].contents[0].text = new Date().toUTCString();
 
   const replyMessage = {
     type: "flex",
