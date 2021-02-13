@@ -155,5 +155,9 @@ export function generateRow3(title, value1, value2, value3, options) {
     returnBody.contents[3].color = options.thirdColor
   }
 
+  if (options && options.firstBold) {
+    returnBody.contents[0].weight = "bold"
+  }
+
   return returnBody;
 }

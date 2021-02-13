@@ -101,7 +101,7 @@ async function getMirrorPrices(event) {
 
     const diff = "" + (((realPrice - oraclePrice) * 100) / oraclePrice).toFixed(2);
 
-    template.body.contents[4].contents.push(generateRow3(price.symbol, oraclePrice, realPrice, diff, { thirdColor: "#FF2400" }));
+    template.body.contents[4].contents.push(generateRow3(price.symbol, oraclePrice, realPrice, diff, { thirdColor: "#FF2400", firstBold: true }));
   });
 
   const replyMessage = {
