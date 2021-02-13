@@ -38,7 +38,6 @@ async function handleEvent(event) {
 
   // Test valid address
   const text = event.message.text;
-  console.log("text", text);
 
   const terraAddressFormat = /^terra[a-z0-9]{39}$/;
 
