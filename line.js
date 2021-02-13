@@ -69,3 +69,33 @@ export const listTemplate = {
     }
   }
 };
+
+export function generateRow(title, value, options) {
+  let returnBody = {
+    type: "box",
+    layout: "horizontal",
+    contents: [
+      {
+        type: "text",
+        text: title,
+        size: "sm",
+        color: "#555555",
+        flex: 0
+      },
+      {
+        type: "text",
+        text: value,
+        size: "sm",
+        color: "#111111",
+        align: "end"
+      }
+    ]
+  };
+
+  if (options && options.bold) {
+    returnBody.contents[0].weight = "bold";
+    returnBody.contents[1].weight = "bold";
+  }
+
+  return returnBody;
+}

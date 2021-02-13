@@ -3,7 +3,7 @@ import line from "@line/bot-sdk";
 import express from "express";
 import { getReward, getMirPrice } from "./mirror.js";
 
-import { listTemplate } from "./line.js";
+import { listTemplate, generateRow } from "./line.js";
 
 // create LINE SDK config from env variables
 const config = {
@@ -61,16 +61,16 @@ async function handleEvent(event) {
   mirrorReward.forEach(reward => {
     sum += parseFloat(reward.reward);
     replyContent.body.contents[4].contents.push(
-      generateLine(reward.name, reward.reward)
+      generateRow(reward.name, reward.reward)
     );
   });
 
   replyContent.body.contents[4].contents.push(
-    generateLine("Total(MIR)", "" + sum.toFixed(6), { bold: true })
+    generateRow("Total(MIR)", "" + sum.toFixed(6), { bold: true })
   );
 
   replyContent.body.contents[4].contents.push(
-    generateLine("Total(UST)", "" + (sum * parseFloat(mirPrice)).toFixed(6), {
+    generateRow("Total(UST)", "" + (sum * parseFloat(mirPrice)).toFixed(6), {
       bold: true
     })
   );
@@ -83,36 +83,6 @@ async function handleEvent(event) {
 
   // use reply API
   return client.replyMessage(event.replyToken, replyMessage);
-}
-
-function generateLine(title, value, options) {
-  let returnBody = {
-    type: "box",
-    layout: "horizontal",
-    contents: [
-      {
-        type: "text",
-        text: title,
-        size: "sm",
-        color: "#555555",
-        flex: 0
-      },
-      {
-        type: "text",
-        text: value,
-        size: "sm",
-        color: "#111111",
-        align: "end"
-      }
-    ]
-  };
-
-  if (options && options.bold) {
-    returnBody.contents[0].weight = "bold";
-    returnBody.contents[1].weight = "bold";
-  }
-
-  return returnBody;
 }
 
 // listen on port
