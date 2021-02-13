@@ -1,9 +1,19 @@
 "use strict";
 import line from "@line/bot-sdk";
 import express from "express";
-import { getReward, getMirPrice, getPrices, getMarketPrices } from "./mirror.js";
+import {
+  getReward,
+  getMirPrice,
+  getPrices,
+  getMarketPrices
+} from "./mirror.js";
 
-import { listTemplate, generateRow, generateRow3, generateTemplate } from "./line.js";
+import {
+  listTemplate,
+  generateRow,
+  generateRow3,
+  generateTemplate
+} from "./line.js";
 
 // create LINE SDK config from env variables
 const config = {
@@ -66,16 +76,24 @@ async function getMirrorReward(text, event) {
   let sum = 0;
   mirrorReward.forEach(reward => {
     sum += parseFloat(reward.reward);
-    replyContent.body.contents[4].contents.push(generateRow(reward.name, reward.reward));
+    replyContent.body.contents[4].contents.push(
+      generateRow(reward.name, reward.reward)
+    );
   });
 
-  replyContent.body.contents[4].contents.push(generateRow("Total(MIR)", "" + sum.toFixed(6), { bold: true }));
+  replyContent.body.contents[4].contents.push(
+    generateRow("Total(MIR)", "" + sum.toFixed(6), { bold: true })
+  );
 
   replyContent.body.contents[4].contents.push(
     generateRow("Total(UST)", "" + (sum * parseFloat(mirPrice)).toFixed(6), {
       bold: true
     })
   );
+
+  replyContent.body.contents[
+    replyContent.body.contents.length - 1
+  ].contents[0].text = new Date.toUTCString();
 
   const replyMessage = {
     type: "flex",
@@ -90,17 +108,29 @@ async function getMirrorReward(text, event) {
 async function getMirrorPrices(event) {
   let template = generateTemplate("Market Prices", "Mirror", "to the moon");
   const prices = await getMarketPrices();
-  template.body.contents[4].contents.push(generateRow3("Name", "Oracle", "AMM", "Diff%"));
+  template.body.contents[4].contents.push(
+    generateRow3("Name", "Oracle", "AMM", "Diff%")
+  );
   prices.assets.forEach(price => {
     let realPrice = price.prices.price;
     realPrice = realPrice ? parseFloat(realPrice).toFixed(2) + "" : "-";
     let oraclePrice = price.prices.oraclePrice;
     oraclePrice = oraclePrice ? parseFloat(oraclePrice).toFixed(2) + "" : "-";
 
-    const diff = "" + (((realPrice - oraclePrice) * 100) / oraclePrice).toFixed(2);
+    const diff =
+      "" + (((realPrice - oraclePrice) * 100) / oraclePrice).toFixed(2);
 
-    template.body.contents[4].contents.push(generateRow3(price.symbol, oraclePrice, realPrice, diff, { thirdColor: "#FF2400", firstBold: true }));
+    template.body.contents[4].contents.push(
+      generateRow3(price.symbol, oraclePrice, realPrice, diff, {
+        thirdColor: "#FF2400",
+        firstBold: true
+      })
+    );
   });
+
+  template.body.contents[
+    template.body.contents.length - 1
+  ].contents[0].text = new Date.toUTCString();
 
   const replyMessage = {
     type: "flex",
