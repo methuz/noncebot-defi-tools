@@ -136,7 +136,7 @@ export function generateRow3(title, value1, value2, value3, options) {
       },
       {
         type: "text",
-        text: value2,
+        text: value3,
         size: "sm",
         color: "#111111",
         align: "end"
