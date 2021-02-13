@@ -42,14 +42,14 @@ async function handleEvent(event) {
   const terraAddressFormat = /^terra[a-z0-9]{39}$/;
 
   if (terraAddressFormat.test(text)) {
-    return await getMirrorReward(text);
+    return await getMirrorReward(text, event);
   } else {
     const replyMessage = { type: "text", text: "Invalid Command" };
     return client.replyMessage(event.replyToken, replyMessage);
   }
 }
 
-async function getMirrorReward(text) {
+async function getMirrorReward(text, event) {
   const mirrorReward = await getReward(text);
   const priceData = await getMirPrice();
   const mirPrice = priceData.asset.prices.price;
