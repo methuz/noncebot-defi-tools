@@ -1,7 +1,7 @@
 "use strict";
 import line from "@line/bot-sdk";
 import express from "express";
-import { sortBy } from "lodash";
+import _ from "lodash";
 import { getReward, getMirPrice, getPrices, getMarketPrices } from "./mirror.js";
 
 import { listTemplate, generateRow, generateRow3, generateTemplate } from "./line.js";
