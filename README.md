@@ -5,5 +5,8 @@
 
 ## Check Reward
 
-Just send your address to check mirror reward
+Just text your address to check mirror reward
 ![Reward check](https://github.com/methuz/noncebot-defi-tools/raw/main/img/reward.png)
+
+Text 'mir' or 'mirror' to check mAssets price
+![Price check](https://raw.githubusercontent.com/methuz/noncebot-defi-tools/main/img/prices.png)
